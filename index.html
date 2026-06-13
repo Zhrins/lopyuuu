@@ -1,0 +1,1427 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Retro Boy Gift</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            min-height: 100vh;
+            background: #25094d;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'VT323', monospace;
+            font-size: 20px;
+            padding: 10px;
+            overflow: hidden;
+        }
+
+        /* CONTAINER UTAMA */
+        .wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 360px;
+            height: 660px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* GAME BOY HARDWARE CASING */
+        .gameboy-body {
+            background: #e2e2e2;
+            width: 100%;
+            height: 100%;
+            border-radius: 20px 20px 60px 20px;
+            padding: 20px 15px;
+            box-shadow: 
+                0 18px 0 #b5b5b5,
+                0 25px 40px rgba(0,0,0,0.6),
+                inset 3px 3px 0 #fff,
+                inset -3px -3px 0 #999;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transition: opacity 0.3s ease, transform 0.4s ease;
+            z-index: 10;
+        }
+
+        .brand-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 9px;
+            color: #333;
+            padding: 0 5px;
+        }
+        .led-power {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .led-power::before {
+            content: '';
+            width: 8px; height: 8px;
+            background: #ff3838;
+            border-radius: 50%;
+            box-shadow: 0 0 6px #ff3838;
+        }
+
+        /* MAIN CRT SCREEN ZONE */
+        .hardware-screen-zone {
+            background: #718093;
+            border-radius: 10px 10px 10px 10px;
+            padding: 15px;
+            box-shadow: inset 3px 3px 5px rgba(0,0,0,0.4);
+            margin-bottom: 25px;
+            height: 200px;
+            display: flex;
+        }
+        
+        .internal-crt-screen {
+            background: #1e2d1a;
+            border: 4px solid #222;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.9);
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            border-radius: 4px;
+        }
+
+        .screen-welcome-title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 16px;
+            text-align: center;
+            line-height: 1.6;
+            color: #8be9fd;
+            text-shadow: 0 0 5px rgba(139,233,253,0.6);
+            margin-bottom: 10px;
+        }
+        .screen-welcome-sub {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 9px;
+            color: #ffb86c;
+            text-align: center;
+            animation: blinkEffect 1s infinite;
+        }
+
+        @keyframes blinkEffect {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* MUSIC APPLICATION CONTAINER */
+        .music-app-ui {
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            background: #0f051d;
+            border: 2px solid #bd93f9;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.9);
+            padding: 6px;
+            position: absolute;
+            top: 0; left: 0;
+            z-index: 5;
+            overflow: hidden;
+        }
+
+        /* SUB-VIEW 1: TRACKLIST MENU */
+        .music-view-list {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+        }
+        .music-app-header {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 8px;
+            color: #ff79c6;
+            text-align: center;
+            border-bottom: 1px dashed #ff79c6;
+            padding-bottom: 4px;
+            margin-bottom: 4px;
+        }
+        .track-list-wrapper {
+            flex: 1;
+            overflow-y: auto;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+            padding-right: 2px;
+        }
+        .track-list-wrapper::-webkit-scrollbar { width: 3px; }
+        .track-list-wrapper::-webkit-scrollbar-thumb { background: #ff79c6; border-radius: 2px; }
+        
+        .track-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid #282a36;
+            padding: 3px 6px;
+            border-radius: 4px;
+            font-family: sans-serif;
+            font-size: 13px;
+            color: #f8f8f2;
+        }
+        .track-item.selected-track {
+            background: #ff79c6;
+            color: #0f051d;
+            border-color: #fff;
+            font-weight: bold;
+        }
+        .track-meta {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        .track-index {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 7px;
+            opacity: 0.8;
+        }
+
+        /* SUB-VIEW 2: NOW PLAYING SCREEN */
+        .music-view-player {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            justify-content: center;
+            padding: 4px;
+        }
+        .player-main-layout {
+            display: flex;
+            width: 100%;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .player-album-art {
+            width: 55px;
+            height: 55px;
+            background: #282a36;
+            border: 2px dashed #ff79c6;
+            border-radius: 6px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 20px;
+            box-shadow: 0 0 8px rgba(255, 121, 198, 0.3);
+            animation: spinDisc 4s linear infinite;
+            animation-play-state: paused;
+        }
+        @keyframes spinDisc {
+            100% { transform: rotate(360deg); }
+        }
+        .player-meta-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .player-song-title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 10px;
+            color: #50fa7b;
+            margin-bottom: 6px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .player-song-artist {
+            font-family: sans-serif;
+            font-size: 13px;
+            color: #f8f8f2;
+            opacity: 0.8;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        /* TIME indicator & PROGRESS TIMELINE LINE */
+        .player-timeline-zone {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .player-progress-bar {
+            width: 100%;
+            height: 4px;
+            background: #44475a;
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+        .player-progress-fill {
+            height: 100%;
+            width: 0%;
+            background: #ff79c6;
+            box-shadow: 0 0 8px #ff79c6;
+            transition: width 0.1s linear;
+        }
+        .player-time-digits {
+            display: flex;
+            justify-content: space-between;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 7px;
+            color: #f1fa8c;
+        }
+
+        /* GIFT APPLICATION CONTAINER */
+        .gift-app-ui {
+            width: 100%;
+            height: 100%;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #111;
+            border: 2px solid #f1fa8c;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.9);
+            padding: 10px;
+            position: absolute;
+            top: 0; left: 0;
+            z-index: 5;
+        }
+        .gift-app-header {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 11px;
+            color: #f1fa8c;
+            text-shadow: 0 0 5px rgba(241,250,140,0.5);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .gift-options-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            max-width: 180px;
+        }
+        .gift-opt-btn {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 10px;
+            color: #fff;
+            background: #222;
+            border: 2px solid #444;
+            padding: 8px;
+            text-align: center;
+            border-radius: 6px;
+            transition: all 0.1s ease;
+        }
+        .gift-opt-btn.selected-gift-opt {
+            background: #f1fa8c;
+            color: #111;
+            border-color: #fff;
+            box-shadow: 0 0 10px rgba(241,250,140,0.8);
+            transform: scale(1.05);
+        }
+
+        /* GRID CONTAINER */
+        .grid-menu-container {
+            position: relative;
+            width: 100%;
+            margin-bottom: 25px;
+        }
+
+        /* GRID MENU 2X2 */
+        .screen-menu-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-auto-rows: 42px;
+            gap: 15px;
+            width: 100%;
+            padding: 0 5px;
+        }
+        .grid-node {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 10px;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            border-radius: 10px;
+            box-shadow: 
+                0 5px 0 rgba(0,0,0,0.3),
+                inset 1px 2px 2px rgba(255,255,255,0.4);
+            text-shadow: 1px 1px 0 rgba(0,0,0,0.6);
+            transition: transform 0.1s ease;
+            cursor: pointer;
+        }
+        
+        .grid-node[data-app="message"] { background: #2f80ed; }
+        .grid-node[data-app="gallery"] { background: #eb5757; }
+        .grid-node[data-app="music"]   { background: #bb6bd9; }
+        .grid-node[data-app="games"]   { background: #27ae60; }
+
+        /* THE SECRET CENTER YELLOW GIFT NODE */
+        .grid-node-gift {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 75px;
+            height: 38px;
+            background: #f1fa8c;
+            color: #111;
+            font-family: 'Press Start 2P', monospace;
+            font-size: 9px;
+            font-weight: bold;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 8px;
+            box-shadow: 0 4px 0 #b3b846, 0 4px 10px rgba(0,0,0,0.3);
+            z-index: 20;
+            opacity: 0;
+            pointer-events: none;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s ease;
+        }
+        /* Triggered via javascript once all 4 items unlocked */
+        .grid-node-gift.unlocked-visible {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* OVERRIDES SELECTIONS ACCORDINGLY */
+        .grid-node.active-select {
+            outline: 3px solid #fff;
+            box-shadow: 0 0 15px rgba(255,255,255,0.9), 0 5px 0 rgba(0,0,0,0.4);
+            transform: scale(1.04);
+        }
+        .grid-node-gift.active-select {
+            outline: 3px solid #fff;
+            transform: translate(-50%, -50%) scale(1.08);
+            box-shadow: 0 0 20px rgba(241,250,140,1), 0 4px 0 #b3b846;
+        }
+
+        /* OVERLAY LAYAR FULLSCREEN FOCUS */
+        .fullscreen-focus-layer {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: #111116;
+            border: 4px solid #222;
+            border-radius: 16px;
+            padding: 25px 18px;
+            display: flex;
+            flex-direction: column;
+            z-index: 50;
+            opacity: 0;
+            transform: scale(0.85);
+            pointer-events: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .fullscreen-focus-layer.activated {
+            opacity: 1;
+            transform: scale(1);
+            pointer-events: auto;
+        }
+
+        .focus-header-title {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 22px;
+            color: #00ff66;
+            text-shadow: 0 0 8px rgba(0,255,102,0.5);
+            text-align: center;
+            margin-bottom: 15px;
+            border-bottom: 2px dashed #333;
+            padding-bottom: 10px;
+        }
+
+        /* MESSAGE AREA */
+        .focus-text-area {
+            flex: 1;
+            color: #e0e0e0;
+            font-size: 24px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            overflow-y: auto;
+        }
+
+        /* PHOTOPRINTER MAIN BOX WITH INFINITE SCROLL SYSTEM */
+        .focus-printer-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: #191922;
+            border: 2px solid #333;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+        }
+        .printer-sub-header {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 8px;
+            color: #888;
+            text-align: center;
+            padding: 8px 0;
+            background: #111;
+            border-bottom: 2px solid #222;
+        }
+        .printer-mouth-slot {
+            height: 12px;
+            background: #050507;
+            width: 90%;
+            margin: 10px auto 0 auto;
+            border-radius: 4px;
+            box-shadow: inset 0 3px 5px rgba(0,0,0,1);
+            position: relative;
+            z-index: 25;
+        }
+        
+        .printer-tray-output {
+            flex: 1;
+            position: relative;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            width: 100%;
+            padding: 10px 0 30px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .printer-tray-output::-webkit-scrollbar { width: 4px; }
+        .printer-tray-output::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
+
+        .polaroid-paper {
+            background: #ffffff;
+            padding: 10px 10px 25px 10px;
+            width: 82%;
+            max-width: 210px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+            border-radius: 2px;
+            user-select: auto;
+            flex-shrink: 0;
+            max-height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: max-height 4.5s cubic-bezier(0.1, 0.5, 0.3, 1), opacity 0.5s ease;
+            cursor: pointer; /* Menandakan kalau foto bisa diklik */
+        }
+        .polaroid-paper.printing-down { max-height: 350px; opacity: 1; }
+
+        /* PERBAIKAN UTAMA: FOTO SEKARANG AMAN GAK AKAN KEPOTONG */
+        .polaroid-img { 
+            width: 100%; 
+            aspect-ratio: 1/1; 
+            background-size: contain !important; /* Memaksa seluruh gambar masuk tanpa terpotong */
+            background-repeat: no-repeat !important;
+            background-position: center !important; 
+            border: 2px solid #222; 
+            background-color: #000000; /* Warna pelindung area kosong */
+        }
+        
+        .polaroid-caption { color: #111; font-size: 15px; font-weight: bold; margin-top: 10px; text-align: center; font-family: sans-serif; }
+        .printer-status-ticker { font-family: 'Press Start 2P', monospace; font-size: 8px; color: #00ff66; text-align: center; padding: 12px 5px; background: #111; border-top: 1px solid #222; z-index: 30; }
+
+        /* MODAL LAYER UNTUK ZOOM VIEW FULLSCREEN FOTO */
+        .gallery-zoom-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: rgba(5, 5, 8, 0.95);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .gallery-zoom-overlay.visible-zoom {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .zoom-frame-container {
+            position: relative;
+            width: 90%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .zoom-target-image {
+            width: 100%;
+            height: auto;
+            max-height: 75vh;
+            object-fit: contain;
+            border: 4px solid #fff;
+            box-shadow: 0 0 25px rgba(255,255,255,0.2);
+            border-radius: 4px;
+        }
+        .zoom-caption-text {
+            color: #fff;
+            font-family: sans-serif;
+            font-size: 16px;
+            margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+        .zoom-close-btn {
+            position: absolute;
+            top: -40px; right: 0;
+            background: none; border: none;
+            color: #fff; font-size: 28px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        /* RE-DESIGN AREA SNAKE GAME MODIFIED */
+        .snake-game-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            background: #0d120a;
+            border: 3px solid #27ae60;
+            border-radius: 8px;
+            padding: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+        #snakeCanvas {
+            background: #141f10;
+            border: 2px solid #1e2d1a;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+            width: 100%;
+            max-width: 240px;
+            height: auto;
+            aspect-ratio: 240/220;
+        }
+        .score-board {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 10px;
+            color: #27ae60;
+            margin-top: 6px;
+            margin-bottom: 8px;
+            width: 100%;
+            max-width: 240px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* POP-UP GAME OVER CUTE MODE */
+        .cute-popup-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(13, 18, 10, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            text-align: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        .cute-popup-overlay.triggered {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .cute-popup-card {
+            background: #191922;
+            border: 2px solid #eb5757;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 0 15px rgba(235,87,87,0.4);
+            max-width: 260px;
+        }
+        .cute-popup-text {
+            color: #ff79c6;
+            font-family: sans-serif;
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 1.5;
+            margin-bottom: 15px;
+        }
+        .cute-retry-btn {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 9px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 3px 0 #1e7e43;
+        }
+        .cute-retry-btn:active { transform: translateY(2px); box-shadow: 0 1px 0 #1e7e43; }
+
+        /* D-PAD VIRTUAL SCREEN MINI */
+        .snake-virtual-dpad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            width: 90px;
+            height: 90px;
+            margin-top: auto;
+            margin-bottom: 5px;
+            gap: 2px;
+        }
+        .sdpad-btn {
+            background: #222;
+            border: 1px solid #333;
+            border-radius: 4px;
+            color: #555;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .sdpad-btn:active { background: #333; color: #fff; }
+        .sdpad-up    { grid-column: 2; grid-row: 1; border-bottom: none; border-radius: 4px 4px 0 0; color: #00ff66; }
+        .sdpad-left  { grid-column: 1; grid-row: 2; border-right: none; border-radius: 4px 0 0 4px; color: #00ff66; }
+        .sdpad-core  { grid-column: 2; grid-row: 2; background: #151515; border: none; cursor: default; }
+        .sdpad-right { grid-column: 3; grid-row: 2; border-left: none; border-radius: 0 4px 4px 0; color: #00ff66; }
+        .sdpad-down  { grid-column: 2; grid-row: 3; border-top: none; border-radius: 0 0 4px 4px; color: #00ff66; }
+
+        /* ACTION SYSTEM NAVIGATION BUTTONS */
+        .focus-navigation-bar {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 15px;
+            width: 100%;
+        }
+        .focus-action-btn {
+            font-family: 'Press Start 2P', monospace;
+            font-size: 11px;
+            color: #fff;
+            border: none;
+            padding: 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            text-align: center;
+            box-shadow: 0 4px 0 rgba(0,0,0,0.4);
+        }
+        .btn-green { background: #27ae60; }
+        .btn-red { background: #eb5757; }
+        .focus-action-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 rgba(0,0,0,0.4); }
+
+        /* PHYSICAL HARDWARE CONTROLS */
+        .bottom-hardware-zone { display: flex; justify-content: space-between; align-items: center; padding: 0 5px; margin-top: auto; }
+        .dpad-cross { position: relative; width: 85px; height: 85px; }
+        .dpad-bar { position: absolute; background: #222; box-shadow: inset 1px 1px 0 #444, 2px 3px 5px rgba(0,0,0,0.3); border-radius: 4px; }
+        .dpad-h { width: 85px; height: 28px; top: 28px; left: 0; }
+        .dpad-v { width: 28px; height: 85px; top: 0; left: 28px; }
+        .dpad-gate { position: absolute; z-index: 12; cursor: pointer; border: none; background: transparent; }
+        #goUp    { width: 28px; height: 28px; top: 0; left: 28px; }
+        #goDown  { width: 28px; height: 28px; bottom: 0; left: 28px; }
+        #goLeft  { width: 28px; height: 28px; top: 28px; left: 0; }
+        #goRight { width: 28px; height: 28px; top: 28px; right: 0; }
+        .dpad-c { position: absolute; width: 28px; height: 28px; top: 28px; left: 28px; background: #222; z-index: 2; }
+
+        .ab-hardware-buttons { display: flex; gap: 14px; transform: rotate(-15deg); margin-right: 5px; }
+        .hw-circle { width: 42px; height: 42px; background: #eb5757; border-radius: 50%; border: none; box-shadow: 0 4px 0 #9c2b2b, 2px 4px 6px rgba(0,0,0,0.3); cursor: pointer; }
+
+        .system-footer-pills { display: flex; justify-content: center; gap: 15px; margin-top: 15px; padding-bottom: 5px; }
+        .pill-shape { width: 40px; height: 9px; background: #999; border-radius: 10px; box-shadow: 0 3px 0 #666; }
+        .speaker-lines { display: flex; gap: 5px; transform: rotate(-28deg); position: absolute; bottom: 12px; right: 20px; }
+        .line-str { width: 5px; height: 35px; background: #c7c7c7; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    
+    <div class="gameboy-body" id="hardwareShell">
+        <div class="brand-header">
+            <div class="led-power">POWER</div>
+            <div> BOY</div>
+        </div>
+
+        <div class="hardware-screen-zone">
+            <div class="internal-crt-screen" id="crtScreenContainer">
+                <div class="screen-welcome-title" id="mainWelcomeTitle">Happy<br>Birthday!</div>
+                <div class="screen-welcome-sub" id="mainWelcomeSub">Press Start Button</div>
+
+                <div class="music-app-ui" id="internalMusicApp">
+                    <div class="music-view-list" id="musicViewList">
+                        <div class="music-app-header">🎵 TOP 10 TRACKS 🎵</div>
+                        <div class="track-list-wrapper" id="trackListWrapper"></div>
+                    </div>
+
+                    <div class="music-view-player" id="musicViewPlayer">
+                        <div class="player-main-layout">
+                            <div class="player-album-art" id="playerAlbumArt">💿</div>
+                            <div class="player-meta-info">
+                                <div class="player-song-title" id="playerSongTitle">JUDUL LAGU</div>
+                                <div class="player-song-artist" id="playerSongArtist">PEMBUAT LAGU</div>
+                            </div>
+                        </div>
+                        <div class="player-timeline-zone">
+                            <div class="player-progress-bar">
+                                <div class="player-progress-fill" id="playerProgressFill"></div>
+                            </div>
+                            <div class="player-time-digits">
+                                <span id="playerTimeCurrent">00:00</span>
+                                <span id="playerTimeDuration">00:00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="gift-app-ui" id="internalGiftApp">
+                    <div class="gift-app-header">🎁 CHOOSE YOUR GIFT 🎁</div>
+                    <div class="gift-options-wrapper">
+                        <div class="gift-opt-btn selected-gift-opt" id="giftOpt-0">ROBUX</div>
+                        <div class="gift-opt-btn" id="giftOpt-1">BARANG</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="grid-menu-container">
+            <div class="screen-menu-grid">
+                <div class="grid-node active-select" data-r="0" data-c="0" data-app="message">MESSAGE</div>
+                <div class="grid-node" data-r="0" data-c="1" data-app="gallery">GALLERY</div>
+                <div class="grid-node" data-r="1" data-c="0" data-app="music">MUSIC</div>
+                <div class="grid-node" data-r="1" data-c="1" data-app="games">SNAKE</div>
+            </div>
+            <div class="grid-node-gift" id="secretGiftNode" data-app="gift">GIFT</div>
+        </div>
+
+        <div class="bottom-hardware-zone">
+            <div class="dpad-cross">
+                <div class="dpad-bar dpad-h"></div>
+                <div class="dpad-bar dpad-v"></div>
+                <div class="dpad-c"></div>
+                <button class="dpad-gate" id="goUp"></button>
+                <button class="dpad-gate" id="goDown"></button>
+                <button class="dpad-gate" id="goLeft"></button>
+                <button class="dpad-gate" id="goRight"></button>
+            </div>
+            <div class="ab-hardware-buttons">
+                <button class="hw-circle" id="hwBtnB"></button>
+                <button class="hw-circle" id="hwBtnA"></button>
+            </div>
+        </div>
+
+        <div class="system-footer-pills"><div class="pill-shape"></div><div class="pill-shape"></div></div>
+        <div class="speaker-lines"><div class="line-str"></div><div class="line-str"></div><div class="line-str"></div></div>
+    </div>
+
+    <div class="fullscreen-focus-layer" id="focusMessageLayout">
+        <div class="focus-header-title">Message</div>
+        <div class="focus-text-area" id="boxTxtContainer"></div>
+        <div class="focus-navigation-bar">
+            <button class="focus-action-btn btn-green" id="btnForwardText">SELANJUTNYA</button>
+            <button class="focus-action-btn btn-red" id="btnDismissText">KEMBALI</button>
+        </div>
+    </div>
+
+    <div class="fullscreen-focus-layer" id="focusGalleryLayout">
+        <div class="focus-header-title">Gallery</div>
+        <div class="focus-printer-container">
+            <div class="printer-sub-header"> PHOTOBOX</div>
+            <div class="printer-mouth-slot"></div>
+            <div class="printer-tray-output" id="printerTrayOutput"></div>
+            <div class="printer-status-ticker" id="printerStatusTicker">Menghubungkan printer...</div>
+        </div>
+        <div class="focus-navigation-bar">
+            <button class="focus-action-btn btn-red" id="btnDismissGallery">KEMBALI</button>
+        </div>
+    </div>
+
+    <div class="fullscreen-focus-layer" id="focusSnakeLayout">
+        <div class="focus-header-title">Snake Game</div>
+        <div class="snake-game-container">
+            <canvas id="snakeCanvas" width="240" height="220"></canvas>
+            <div class="score-board">
+                <span>SCORE: <span id="currentScoreOpt">0</span></span>
+                <span>HI: 100</span>
+            </div>
+            <div class="cute-popup-overlay" id="cuteGameOverPopup">
+                <div class="cute-popup-card">
+                    <div class="cute-popup-text" id="customSweetGameOverText">gapapa cantikk kalah jugaa yang penting kamu happyyy ❤️</div>
+                    <button class="cute-retry-btn" id="btnCuteRetry">RETRY</button>
+                </div>
+            </div>
+            <div class="snake-virtual-dpad">
+                <button class="sdpad-btn sdpad-up" id="vUp">▲</button>
+                <button class="sdpad-btn sdpad-left" id="vLeft">◀</button>
+                <div class="sdpad-btn sdpad-core"></div>
+                <button class="sdpad-btn sdpad-right" id="vRight">▶</button>
+                <button class="sdpad-btn sdpad-down" id="vDown">▼</button>
+            </div>
+        </div>
+        <div class="focus-navigation-bar">
+            <button class="focus-action-btn btn-red" id="btnDismissSnake">KELUAR</button>
+        </div>
+    </div>
+
+</div>
+
+<div class="gallery-zoom-overlay" id="galleryZoomOverlay">
+    <div class="zoom-frame-container">
+        <button class="zoom-close-btn" id="closeZoomBtn">&times;</button>
+        <img src="" alt="Zoomed Photo" class="zoom-target-image" id="zoomTargetImage">
+        <div class="zoom-caption-text" id="zoomCaptionText">Caption</div>
+    </div>
+</div>
+
+<audio id="sastraBgaudio" src="https://g.top4top.io/m_3815aozkn0.mp3" preload="auto"></audio>
+<audio id="globalPlaylistAudio" preload="auto"></audio>
+
+<script>
+    // System Tracker Matrix Grid Nav
+    let matrixRow = 0;
+    let matrixCol = 0;
+    let isGiftSelected = false; 
+    
+    let modeFocusActive = false;
+    let currentAppActive = "";
+    let musicSubView = "list"; 
+    let selectedGiftIndex = 0; 
+
+    let openedMenus = { message: false, gallery: false, music: false, games: false };
+    let giftUnlocked = false;
+
+    const gridNodes = document.querySelectorAll('.grid-node');
+    const secretGiftNode = document.getElementById('secretGiftNode');
+    const hardwareShell = document.getElementById('hardwareShell');
+    const focusMessageLayout = document.getElementById('focusMessageLayout');
+    const focusGalleryLayout = document.getElementById('focusGalleryLayout');
+    const focusSnakeLayout = document.getElementById('focusSnakeLayout');
+    const sastraAudio = document.getElementById('sastraBgaudio');
+    
+    const globalPlaylistAudio = document.getElementById('globalPlaylistAudio');
+    const internalMusicApp = document.getElementById('internalMusicApp');
+    const internalGiftApp = document.getElementById('internalGiftApp');
+    const musicViewList = document.getElementById('musicViewList');
+    const musicViewPlayer = document.getElementById('musicViewPlayer');
+    const trackListWrapper = document.getElementById('trackListWrapper');
+    
+    const playerAlbumArt = document.getElementById('playerAlbumArt');
+    const playerSongTitle = document.getElementById('playerSongTitle');
+    const playerSongArtist = document.getElementById('playerSongArtist');
+    const playerProgressFill = document.getElementById('playerProgressFill');
+    const playerTimeCurrent = document.getElementById('playerTimeCurrent');
+    const playerTimeDuration = document.getElementById('playerTimeDuration');
+
+    // DOM ELEMENTS UNTUK ZOOM FOTO
+    const galleryZoomOverlay = document.getElementById('galleryZoomOverlay');
+    const zoomTargetImage = document.getElementById('zoomTargetImage');
+    const zoomCaptionText = document.getElementById('zoomCaptionText');
+    const closeZoomBtn = document.getElementById('closeZoomBtn');
+
+    const packetSurat = [
+        "Haiiii\n\nHappyy birthday\n\nHari ini aku mau ngucapin hal-hal positif, selamat ulang tahun my bekeee semoga rezeki di limpah kah Cita-cita diwujudkan dan sehat selalu. Aku sangat bersyukur bisa deket sama kamu, makasih udah jadi temen curhat tempat aku bercerita tentang hal hal yang sebenernya ga perlu di ceritain tapi kamu Terima itu semua tanpa ada rasa penolakan.",
+        "Sebenernya aku bingung mau ngasih kado apaa karna berhubungan rumah kita jauh nanti aku paketin ajaa, maaf yhhh ngebuatin web gini kayak kesannya ga ada effortt Orang-orang ngajak jalan-jalan ke bioskop atau taman hibur ini buat web...\n\nTapi sadar ga sih kamu kamu tuh punya cara sendiri yang bisa bikin aku nyengir tanpa kamu sabari kayak waktu itu kamu ngomong kalo kamu ceritain aku ke temen-temen kamu yaa itu hal sepele tapi buat aku istimewa ga pernah ada yg nyeritain aku ke orang lain kamu jadi orang pertama akan hal itu dann setiap aku chatan sama kamu rasanya kayak happy banget apalagi senyum kamu sanubari terguncang hebat akan keindahan absolut.",
+        "Di umur yang ke 15 ini, kamu harus selalu bahagia yaaaa jangan sering-sering bergadang nanti ga tinggi-tinggi :b oh iyaa kamu jangan pernah nganggep sendiri yhh ada aku di samping kamu\n\nKamu udah nerima aku disisi kamu sekarang izinin aku di samping kamu juga boleh ngeluh, cerita hal-hal kecil yang bakal lupa dalam 1 hari, boleh marah aku bakal jadi support system kamu\n\nKalo ada masalah jangan malu ceritaa aku ga bakal ngejudge cerita kamu koo\n\nMakasih udah jadi orang terbaik :b\n\nLopyuu"
+    ];
+    let activeSuratIndex = 0;
+
+    const databaseMedia = [
+        { type: "image", src: "https://f.top4top.io/p_3815jru5v1.jpg", label: "Moment Spesial #1 ✨" },
+        { type: "image", src: "https://e.top4top.io/p_3815td8re0.jpg", label: "Moment Spesial #2 ⚡" },
+        { type: "image", src: "https://i.top4top.io/p_381587ma80.jpg", label: "Moment Spesial #3" },
+        { type: "image", src: "https://j.top4top.io/p_38156js961.jpg", label: "Moment Spesial #4" },
+        { type: "image", src: "https://k.top4top.io/p_38157e5lv2.jpg", label: "Moment Spesial #5" },
+        { type: "image", src: "https://f.top4top.io/p_3815i9vni1.jpg", label: "Moment Spesial #6" }
+    ];
+
+    const databaseSongs = [
+        { title: "Song Title 1", artist: "Artist Name 1", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+        { title: "Song Title 2", artist: "Artist Name 2", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+        { title: "Song Title 3", artist: "Artist Name 3", src: "" },
+        { title: "Song Title 4", artist: "Artist Name 4", src: "" },
+        { title: "Song Title 5", artist: "Artist Name 5", src: "" },
+        { title: "Song Title 6", artist: "Artist Name 6", src: "" },
+        { title: "Song Title 7", artist: "Artist Name 7", src: "" },
+        { title: "Song Title 8", artist: "Artist Name 8", src: "" },
+        { title: "Song Title 9", artist: "Artist Name 9", src: "" },
+        { title: "Song Title 10", artist: "Artist Name 10", src: "" }
+    ];
+    let selectedSongIndex = 0;
+    let currentlyPlayingIndex = -1;
+
+    let validMediaQueue = [];
+    let currentPrintIndex = 0;
+    let printTickerInterval = null;
+    let autoPrintTimeout = null;
+
+    // SNAKE VARS
+    const canvas = document.getElementById('snakeCanvas');
+    const ctx = canvas.getContext('2d');
+    const gridBoxSize = 10; 
+    let snakeBody = [];
+    let snakeFood = {};
+    let runDirection = "RIGHT";
+    let gameLoopInterval = null;
+    let snakeScore = 0;
+    let isGameOver = false;
+
+    // BUILD TRACKLIST UI
+    function buildTracklistUI() {
+        trackListWrapper.innerHTML = '';
+        databaseSongs.forEach((song, i) => {
+            const item = document.createElement('div');
+            item.className = `track-item ${i === selectedSongIndex ? 'selected-track' : ''}`;
+            item.id = `track-${i}`;
+            item.innerHTML = `
+                <div class="track-meta">
+                    <span class="track-index">${String(i + 1).padStart(2, '0')}.</span>
+                    <span>${song.title || 'Empty Slot'}</span>
+                </div>
+                <span class="track-status-icon" id="status-icon-${i}">${currentlyPlayingIndex === i && !globalPlaylistAudio.paused ? '▶' : '⏹'}</span>
+            `;
+            trackListWrapper.appendChild(item);
+        });
+    }
+    buildTracklistUI();
+
+    function updateTracklistSelection() {
+        document.querySelectorAll('.track-item').forEach((el, i) => {
+            if(i === selectedSongIndex) {
+                el.classList.add('selected-track');
+                el.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+            } else {
+                el.classList.remove('selected-track');
+            }
+        });
+    }
+
+    function updateGiftOptionSelection() {
+        document.getElementById('giftOpt-0').classList.remove('selected-gift-opt');
+        document.getElementById('giftOpt-1').classList.remove('selected-gift-opt');
+        document.getElementById(`giftOpt-${selectedGiftIndex}`).classList.add('selected-gift-opt');
+    }
+
+    function checkSecretUnlockCondition() {
+        if (!giftUnlocked && openedMenus.message && openedMenus.gallery && openedMenus.music && openedMenus.games) {
+            giftUnlocked = true;
+            secretGiftNode.classList.add('unlocked-visible');
+        }
+    }
+
+    function formatTimeDigits(seconds) {
+        if (isNaN(seconds)) return "00:00";
+        let mins = Math.floor(seconds / 60);
+        let secs = Math.floor(seconds % 60);
+        return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    globalPlaylistAudio.addEventListener('timeupdate', () => {
+        if (currentAppActive === "music" && musicSubView === "player") {
+            const current = globalPlaylistAudio.currentTime;
+            const duration = globalPlaylistAudio.duration || 0;
+            playerTimeCurrent.innerText = formatTimeDigits(current);
+            playerTimeDuration.innerText = formatTimeDigits(duration);
+            let percent = duration > 0 ? (current / duration) * 100 : 0;
+            playerProgressFill.style.width = `${percent}%`;
+        }
+    });
+
+    globalPlaylistAudio.addEventListener('play', () => { playerAlbumArt.style.animationPlayState = "running"; buildTracklistUI(); });
+    globalPlaylistAudio.addEventListener('pause', () => { playerAlbumArt.style.animationPlayState = "paused"; buildTracklistUI(); });
+
+    function renderSelectionState() {
+        if(isGiftSelected) {
+            gridNodes.forEach(node => node.classList.remove('active-select'));
+            secretGiftNode.classList.add('active-select');
+        } else {
+            secretGiftNode.classList.remove('active-select');
+            gridNodes.forEach(node => {
+                let r = parseInt(node.getAttribute('data-r'));
+                let c = parseInt(node.getAttribute('data-c'));
+                if(r === matrixRow && c === matrixCol) node.classList.add('active-select');
+                else node.classList.remove('active-select');
+            });
+        }
+    }
+
+    function openPlayerPage(index) {
+        let targetSong = databaseSongs[index];
+        if(!targetSong.src || targetSong.src.trim() === "") {
+            alert("Link lagu kosong!");
+            return;
+        }
+        musicSubView = "player";
+        musicViewList.style.display = "none";
+        musicViewPlayer.style.display = "flex";
+        playerSongTitle.innerText = targetSong.title;
+        playerSongArtist.innerText = targetSong.artist;
+
+        if (currentlyPlayingIndex !== index) {
+            currentlyPlayingIndex = index;
+            globalPlaylistAudio.src = targetSong.src;
+            globalPlaylistAudio.play().catch(e => console.log(e));
+        } else {
+            playerAlbumArt.style.animationPlayState = globalPlaylistAudio.paused ? "paused" : "running";
+            playerTimeCurrent.innerText = formatTimeDigits(globalPlaylistAudio.currentTime);
+            playerTimeDuration.innerText = formatTimeDigits(globalPlaylistAudio.duration);
+        }
+    }
+
+    function activateFocusScreen(appTarget) {
+        if(openedMenus.hasOwnProperty(appTarget)) {
+            openedMenus[appTarget] = true;
+        }
+
+        if(appTarget === 'music') {
+            modeFocusActive = true;
+            currentAppActive = "music";
+            musicSubView = "list";
+            musicViewList.style.display = "flex";
+            musicViewPlayer.style.display = "none";
+            internalMusicApp.style.display = "flex";
+            buildTracklistUI();
+            return;
+        }
+
+        if(appTarget === 'gift') {
+            modeFocusActive = true;
+            currentAppActive = "gift";
+            selectedGiftIndex = 0;
+            updateGiftOptionSelection();
+            internalGiftApp.style.display = "flex";
+            return;
+        }
+
+        modeFocusActive = true;
+        currentAppActive = appTarget;
+        hardwareShell.style.opacity = "0";
+        hardwareShell.style.transform = "scale(1.1)";
+        
+        setTimeout(() => {
+            hardwareShell.style.display = "none";
+            if (appTarget === 'message') {
+                activeSuratIndex = 0;
+                document.getElementById('boxTxtContainer').innerText = packetSurat[activeSuratIndex];
+                document.getElementById('btnForwardText').innerText = "SELANJUTNYA";
+                focusMessageLayout.classList.add('activated');
+            } else if (appTarget === 'gallery') {
+                focusGalleryLayout.classList.add('activated');
+                document.getElementById('printerTrayOutput').innerHTML = '';
+                validMediaQueue = databaseMedia.filter(item => item.src && item.src.trim() !== "");
+                currentPrintIndex = 0;
+                sastraAudio.currentTime = 0;
+                sastraAudio.play().catch(err => console.log(err));
+
+                if (validMediaQueue.length === 0) {
+                    document.getElementById('printerTrayOutput').innerHTML = `<div style="color:#aaa; font-size:16px; margin-top:50px; text-align:center;">Belum ada foto!</div>`;
+                } else {
+                    executeAutoMediaPrinting(currentPrintIndex);
+                }
+            } else if (appTarget === 'games') {
+                focusSnakeLayout.classList.add('activated');
+                startSnakeEngine();
+            }
+        }, 200);
+    }
+
+    function closeFocusScreen() {
+        if(currentAppActive === "music") {
+            if (musicSubView === "player") {
+                musicSubView = "list";
+                musicViewPlayer.style.display = "none";
+                musicViewList.style.display = "flex";
+                buildTracklistUI();
+            } else {
+                internalMusicApp.style.display = "none";
+                modeFocusActive = false;
+                currentAppActive = "";
+                checkSecretUnlockCondition();
+            }
+            return;
+        }
+
+        if(currentAppActive === "gift") {
+            internalGiftApp.style.display = "none";
+            modeFocusActive = false;
+            currentAppActive = "";
+            return;
+        }
+
+        modeFocusActive = false;
+        if(currentAppActive === 'games') stopSnakeEngine();
+        if(currentAppActive === 'gallery') { sastraAudio.pause(); sastraAudio.currentTime = 0; }
+
+        clearInterval(printTickerInterval);
+        clearTimeout(autoPrintTimeout);
+        
+        let oldApp = currentAppActive;
+        currentAppActive = "";
+
+        focusMessageLayout.classList.remove('activated');
+        focusGalleryLayout.classList.remove('activated');
+        focusSnakeLayout.classList.remove('activated');
+        
+        setTimeout(() => {
+            hardwareShell.style.display = "flex";
+            hardwareShell.offsetHeight; 
+            hardwareShell.style.opacity = "1";
+            hardwareShell.style.transform = "scale(1)";
+            checkSecretUnlockCondition();
+        }, 250);
+    }
+
+    function executeAutoMediaPrinting(index) {
+        const tray = document.getElementById('printerTrayOutput');
+        const ticker = document.getElementById('printerStatusTicker');
+        let currentItem = validMediaQueue[index];
+        let blockCard = document.createElement('div');
+        blockCard.className = 'polaroid-paper';
+        blockCard.innerHTML = `<div class="polaroid-img" style="background-image: url('${currentItem.src}')"></div><div class="polaroid-caption">${currentItem.label}</div>`;
+        
+        // EVENT UNTUK MEMBUKA FULLSCREEN ZOOM SAAT KARTU POLAROID DIKLIK
+        blockCard.addEventListener('click', () => {
+            zoomTargetImage.src = currentItem.src;
+            zoomCaptionText.innerText = currentItem.label;
+            galleryZoomOverlay.classList.add('visible-zoom');
+        });
+
+        tray.appendChild(blockCard);
+
+        let currentPercent = 0;
+        if(printTickerInterval) clearInterval(printTickerInterval);
+        
+        printTickerInterval = setInterval(() => {
+            currentPercent += 2;
+            if (currentPercent <= 100) ticker.innerText = `Mencetak item ${index + 1} dari ${validMediaQueue.length}... (${currentPercent}%)`;
+            if (currentPercent === 2) blockCard.classList.add('printing-down');
+            tray.scrollTop = tray.scrollHeight;
+
+            if (currentPercent >= 100) {
+                clearInterval(printTickerInterval);
+                if (index < validMediaQueue.length - 1) {
+                    autoPrintTimeout = setTimeout(() => { currentPrintIndex++; executeAutoMediaPrinting(currentPrintIndex); }, 1200);
+                } else {
+                    ticker.innerText = `Semua sukses dicetak! Gulir/Klik foto untuk zoom ✨`;
+                }
+            }
+        }, 110);
+    }
+
+    // HANDLER CLOSE ZOOM FULLSCREEN VIEW
+    closeZoomBtn.addEventListener('click', () => { galleryZoomOverlay.classList.remove('visible-zoom'); });
+    galleryZoomOverlay.addEventListener('click', (e) => { if (e.target === galleryZoomOverlay) galleryZoomOverlay.classList.remove('visible-zoom'); });
+
+    // SNAKE ENGINE
+    function startSnakeEngine() {
+        isGameOver = false;
+        snakeBody = [{ x: 5*10, y: 10*10 }, { x: 4*10, y: 10*10 }, { x: 3*10, y: 10*10 }];
+        runDirection = "RIGHT";
+        snakeScore = 0;
+        document.getElementById('currentScoreOpt').innerText = snakeScore;
+        spawnFoodBlock();
+        if(gameLoopInterval) clearInterval(gameLoopInterval);
+        gameLoopInterval = setInterval(updateSnakeFrame, 130);
+    }
+    function stopSnakeEngine() { clearInterval(gameLoopInterval); }
+    function spawnFoodBlock() {
+        snakeFood = {
+            x: Math.floor(Math.random() * (canvas.width / gridBoxSize)) * gridBoxSize,
+            y: Math.floor(Math.random() * (canvas.height / gridBoxSize)) * gridBoxSize
+        };
+    }
+    function triggerGameOverCuteMode() {
+        isGameOver = true;
+        stopSnakeEngine();
+        const popupTextNode = document.getElementById('customSweetGameOverText');
+        if(snakeScore <= 30) popupTextNode.innerHTML = `Score kamu: <b>${snakeScore}</b><br>gapapa cantikk kalah jugaa yang penting kamu happyyy ❤️`;
+        else if(snakeScore <= 70) popupTextNode.innerHTML = `Score kamu: <b>${snakeScore}</b><br>Wihh keren banget mainnya, tapi jangan sampai kecapean yaa cantikk bbee! 💕`;
+        else popupTextNode.innerHTML = `Score kamu: <b>${snakeScore}</b><br>Gokill rekor baruu! Kamu emang paling hebat deh tiada tandingannya 🏆👑`;
+        document.getElementById('cuteGameOverPopup').classList.add('triggered');
+    }
+    function updateSnakeFrame() {
+        if(isGameOver) return;
+        let headX = snakeBody[0].x; let headY = snakeBody[0].y;
+        if (runDirection === "UP") headY -= gridBoxSize;
+        if (runDirection === "DOWN") headY += gridBoxSize;
+        if (runDirection === "LEFT") headX -= gridBoxSize;
+        if (runDirection === "RIGHT") headX += gridBoxSize;
+
+        if (headX < 0 || headX >= canvas.width || headY < 0 || headY >= canvas.height) { triggerGameOverCuteMode(); return; }
+        for(let i=0; i<snakeBody.length; i++) { if(headX === snakeBody[i].x && headY === snakeBody[i].y) { triggerGameOverCuteMode(); return; } }
+
+        let newHeadNode = { x: headX, y: headY };
+        if (headX === snakeFood.x && headY === snakeFood.y) { snakeScore += 10; document.getElementById('currentScoreOpt').innerText = snakeScore; spawnFoodBlock(); }
+        else { snakeBody.pop(); }
+        snakeBody.unshift(newHeadNode);
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = "#eb5757"; ctx.fillRect(snakeFood.x, snakeFood.y, gridBoxSize - 1, gridBoxSize - 1);
+        snakeBody.forEach((part, index) => { ctx.fillStyle = (index === 0) ? "#27ae60" : "#00ff66"; ctx.fillRect(part.x, part.y, gridBoxSize - 1, gridBoxSize - 1); });
+    }
+    function changeSnakeDirection(targetDir) {
+        if(isGameOver) return;
+        if(targetDir === "UP" && runDirection !== "DOWN") runDirection = "UP";
+        if(targetDir === "DOWN" && runDirection !== "UP") runDirection = "DOWN";
+        if(targetDir === "LEFT" && runDirection !== "RIGHT") runDirection = "LEFT";
+        if(targetDir === "RIGHT" && runDirection !== "LEFT") runDirection = "RIGHT";
+    }
+
+    function processActionConfirmA() {
+        if (modeFocusActive) {
+            if(currentAppActive === "music") {
+                if(musicSubView === "list") openPlayerPage(selectedSongIndex);
+                else {
+                    if (globalPlaylistAudio.paused) globalPlaylistAudio.play().catch(e=>console.log(e));
+                    else globalPlaylistAudio.pause();
+                }
+            } else if (currentAppActive === "gift") {
+                if(selectedGiftIndex === 0) {
+                    alert("🎁 Kamu memilih ROBUX! Pilihan cerdas buat mabar bbee! ❤️");
+                } else {
+                    alert("🎁 Kamu memilih BARANG! Nanti aku paketin barang spesial buat kamu yaa! 💕");
+                }
+            }
+            return;
+        }
+
+        if(isGiftSelected) {
+            activateFocusScreen("gift");
+        } else {
+            let selectedNode = document.querySelector('.grid-node.active-select');
+            if(selectedNode) activateFocusScreen(selectedNode.getAttribute('data-app'));
+        }
+    }
+
+    // INTERFACE CONTROLS
+    document.getElementById('vUp').addEventListener('click', () => changeSnakeDirection("UP"));
+    document.getElementById('vDown').addEventListener('click', () => changeSnakeDirection("DOWN"));
+    document.getElementById('vLeft').addEventListener('click', () => changeSnakeDirection("LEFT"));
+    document.getElementById('vRight').addEventListener('click', () => changeSnakeDirection("RIGHT"));
+    document.getElementById('btnCuteRetry').addEventListener('click', () => { document.getElementById('cuteGameOverPopup').classList.remove('triggered'); startSnakeEngine(); });
+
+    document.getElementById('goUp').addEventListener('click', (e) => { 
+        e.preventDefault();
+        if(!modeFocusActive) {
+            if(giftUnlocked && matrixRow === 1 && !isGiftSelected) { isGiftSelected = true; } 
+            else if(isGiftSelected) { isGiftSelected = false; matrixRow = 0; }
+            else if(matrixRow > 0) { matrixRow--; }
+            renderSelectionState();
+        }
+        else if(currentAppActive === 'music' && musicSubView === "list") { if(selectedSongIndex > 0) { selectedSongIndex--; updateTracklistSelection(); } }
+        else if(currentAppActive === 'gift') { if(selectedGiftIndex > 0) { selectedGiftIndex--; updateGiftOptionSelection(); } }
+        else if(currentAppActive === 'games') changeSnakeDirection("UP");
+    });
+
+    document.getElementById('goDown').addEventListener('click', (e) => { 
+        e.preventDefault();
+        if(!modeFocusActive) {
+            if(giftUnlocked && matrixRow === 0 && !isGiftSelected) { isGiftSelected = true; }
+            else if(isGiftSelected) { isGiftSelected = false; matrixRow = 1; }
+            else if(matrixRow < 1) { matrixRow++; }
+            renderSelectionState();
+        }
+        else if(currentAppActive === 'music' && musicSubView === "list") { if(selectedSongIndex < databaseSongs.length - 1) { selectedSongIndex++; updateTracklistSelection(); } }
+        else if(currentAppActive === 'gift') { if(selectedGiftIndex < 1) { selectedGiftIndex++; updateGiftOptionSelection(); } }
+        else if(currentAppActive === 'games') changeSnakeDirection("DOWN");
+    });
+
+    document.getElementById('goLeft').addEventListener('click', (e) => { 
+        e.preventDefault(); 
+        if(!modeFocusActive) {
+            if(isGiftSelected) { isGiftSelected = false; matrixCol = 0; }
+            else if(matrixCol > 0) { matrixCol--; }
+            renderSelectionState();
+        } 
+        else if(currentAppActive === 'games') changeSnakeDirection("LEFT"); 
+    });
+
+    document.getElementById('goRight').addEventListener('click', (e) => { 
+        e.preventDefault(); 
+        if(!modeFocusActive) {
+            if(isGiftSelected) { isGiftSelected = false; matrixCol = 1; }
+            else if(matrixCol < 1) { matrixCol++; }
+            renderSelectionState();
+        } 
+        else if(currentAppActive === 'games') changeSnakeDirection("RIGHT"); 
+    });
+    
+    document.getElementById('hwBtnA').addEventListener('click', processActionConfirmA);
+    document.getElementById('hwBtnB').addEventListener('click', () => { if(modeFocusActive) closeFocusScreen(); });
+
+    document.getElementById('btnForwardText').addEventListener('click', () => {
+        if (activeSuratIndex < packetSurat.length - 1) {
+            activeSuratIndex++; document.getElementById('boxTxtContainer').innerText = packetSurat[activeSuratIndex];
+            if(activeSuratIndex === packetSurat.length - 1) document.getElementById('btnForwardText').innerText = "SELESAI";
+        } else { closeFocusScreen(); }
+    });
+    document.getElementById('btnDismissText').addEventListener('click', closeFocusScreen);
+    document.getElementById('btnDismissGallery').addEventListener('click', closeFocusScreen);
+    document.getElementById('btnDismissSnake').addEventListener('click', closeFocusScreen);
+
+    // KEYBOARD BINDING
+    document.addEventListener('keydown', (e) => {
+        let key = e.key.toLowerCase();
+        if(e.key === 'ArrowUp' || key === 'w') { 
+            if(!modeFocusActive) {
+                if(giftUnlocked && matrixRow === 1 && !isGiftSelected) isGiftSelected = true;
+                else if(isGiftSelected) { isGiftSelected = false; matrixRow = 0; }
+                else if(matrixRow > 0) matrixRow--;
+                renderSelectionState();
+            }
+            else if(currentAppActive === 'music' && musicSubView === "list") { if(selectedSongIndex > 0) { selectedSongIndex--; updateTracklistSelection(); } }
+            else if(currentAppActive === 'gift') { if(selectedGiftIndex > 0) { selectedGiftIndex--; updateGiftOptionSelection(); } }
+            else if(currentAppActive === 'games') changeSnakeDirection("UP");
+        }
+        if(e.key === 'ArrowDown' || key === 's') { 
+            if(!modeFocusActive) {
+                if(giftUnlocked && matrixRow === 0 && !isGiftSelected) isGiftSelected = true;
+                else if(isGiftSelected) { isGiftSelected = false; matrixRow = 1; }
+                else if(matrixRow < 1) matrixRow++;
+                renderSelectionState();
+            }
+            else if(currentAppActive === 'music' && musicSubView === "list") { if(selectedSongIndex < databaseSongs.length - 1) { selectedSongIndex++; updateTracklistSelection(); } }
+            else if(currentAppActive === 'gift') { if(selectedGiftIndex < 1) { selectedGiftIndex++; updateGiftOptionSelection(); } }
+            else if(currentAppActive === 'games') changeSnakeDirection("DOWN");
+        }
+        if(e.key === 'ArrowLeft' || key === 'a') { 
+            if(!modeFocusActive) {
+                if(isGiftSelected) { isGiftSelected = false; matrixCol = 0; }
+                else if(matrixCol > 0) { matrixCol--; }
+                renderSelectionState();
+            } else if(currentAppActive === 'games') changeSnakeDirection("LEFT"); 
+        }
+        if(e.key === 'ArrowRight' || key === 'd') { 
+            if(!modeFocusActive) {
+                if(isGiftSelected) { isGiftSelected = false; matrixCol = 1; }
+                else if(matrixCol < 1) { matrixCol++; }
+                renderSelectionState();
+            } else if(currentAppActive === 'games') changeSnakeDirection("RIGHT"); 
+        }
+        if(e.key === 'Enter' || key === 'x') processActionConfirmA();
+        if(e.key === 'Escape' || key === 'z') { if(modeFocusActive) closeFocusScreen(); }
+    });
+</script>
+</body>
+</html>
